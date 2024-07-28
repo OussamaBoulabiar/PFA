@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+ 
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Assuming the Angular build outputs to dist directory
+                    sh 'npm install' // If npm dependencies are needed
+                    sh 'npm run build' // Or any command to build your project
+                    sh 'mv src dist' // If needed to rename after build
+                }
+            }
+        }
+ 
+        stage('Deploy') {
+            steps {
+                script {
+                    // Deploy to Kubernetes
+                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl apply -f service.yaml'
+                }
+            }
+        }
+    }
+}
